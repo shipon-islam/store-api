@@ -20,11 +20,13 @@ export const createUser = async (
       user.avatar = secure_url;
     }
     //finally create new user
-    const newUser = await userModel.create(user);
+    const { role, _id } = await userModel.create(user);
+
+    const token = generateToken(_id);
     res.status(201).json({
       success: true,
       status: 201,
-      data: newUser,
+      data: { token, role, id: _id },
     });
   } catch (error) {
     next(error);

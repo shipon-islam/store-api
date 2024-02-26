@@ -8,6 +8,7 @@ import productRoutes from "./routes/productRoutes";
 import userRoutes from "./routes/userRoutes";
 import { PORT } from "./secret";
 const app = express();
+mongodb_connect();
 //setup external middileware
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
@@ -26,6 +27,5 @@ app.get("/", (req, res) => {
 app.use(notFoundHandler);
 app.use(errorHandler);
 app.listen(PORT, () => {
-  mongodb_connect();
   console.log(`The server is running at port http://localhost:${PORT}`);
 });
