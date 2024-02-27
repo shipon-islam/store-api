@@ -20,13 +20,14 @@ export const createUser = async (
       user.avatar = secure_url;
     }
     //finally create new user
-    const { role, _id } = await userModel.create(user);
+    const { role, _id, name, email, avatar } = await userModel.create(user);
 
     const token = generateToken(_id);
     res.status(201).json({
       success: true,
       status: 201,
-      data: { token, role, id: _id },
+      token: token,
+      user: { email, name, avatar, role, id: _id },
     });
   } catch (error) {
     next(error);
@@ -79,7 +80,7 @@ export const getUserById = async (
     res.status(200).json({
       success: true,
       status: 200,
-      data: user,
+      user: user,
     });
   } catch (error) {
     next(error);
@@ -104,7 +105,7 @@ export const deleteUserbyId = async (
       res.status(204).json({
         success: true,
         status: 204,
-        data: deletedUser,
+        user: deletedUser,
       });
     }
   } catch (error) {
@@ -137,13 +138,14 @@ export const loginUser = async (
     return next(createError(400, "all fields are required"));
   }
   try {
-    const user = await userModel.findOne({ email });
+    const user = await userModel.findOne({ email }).select("-password");
     if (user && (await comparePassword(password, user.password))) {
       const token = generateToken(user._id);
       res.status(200).json({
         success: true,
         status: 200,
-        auth: { token, role: user.role, id: user._id },
+        token: token,
+        user: user,
       });
     } else {
       return next(createError(401, "invalid creadentials!"));
