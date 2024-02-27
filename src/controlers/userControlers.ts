@@ -138,14 +138,20 @@ export const loginUser = async (
     return next(createError(400, "all fields are required"));
   }
   try {
-    const user = await userModel.findOne({ email }).select("-password");
+    const user = await userModel.findOne({ email });
     if (user && (await comparePassword(password, user.password))) {
       const token = generateToken(user._id);
       res.status(200).json({
         success: true,
         status: 200,
         token: token,
-        user: user,
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          avatar: user.avatar,
+          role: user.role,
+        },
       });
     } else {
       return next(createError(401, "invalid creadentials!"));
