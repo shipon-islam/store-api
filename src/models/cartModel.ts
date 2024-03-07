@@ -4,7 +4,7 @@ const cartSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
-  product: { type: Schema.Types.ObjectId, ref: "Product" },
+  product: { type: Schema.Types.ObjectId, ref: "Product", required: true },
   quantity: {
     type: Number,
     required: true,
@@ -18,4 +18,4 @@ const cartSchema = new Schema({
     required: true,
   },
 });
-export const cartModel = model("Card", cartSchema);
+export const cartModel = model("Cart", cartSchema);
