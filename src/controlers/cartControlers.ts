@@ -72,7 +72,7 @@ export const getCartByUserId = async (
     const carts = await cartModel
       .find({ user: userId })
       .sort({ createdAt: -1 })
-      .populate(["products"]);
+      .populate(["product"]);
     res.status(200).json({
       success: true,
       status: 200,
